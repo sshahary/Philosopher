@@ -75,19 +75,16 @@ int	initialize_philosophers(t_list *ph)
 	int		i;
 
 	i = 0;
-	// pthread_mutex_init(&ph->tab.print, NULL);
 	while (i < ph->tab.philos)
 	{
 		ph->data[i].index = &ph->tab;
 		if (pthread_create(&ph->data[i].thread, \
 			NULL, philosopher_thread, &ph->data[i]) != 0)
 		{
-			// pthread_mutex_unlock(&ph->tab.print);
 			return (ft_exit("Pthread did not return 0\n"));
 		}
 		i++;
 	}
-	// pthread_mutex_unlock(&ph->tab.print);
 	return (1);
 }
 

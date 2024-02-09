@@ -47,15 +47,16 @@ typedef struct s_list
 
 long	ft_atoi(char *str);
 int		isnum(char **str, int i, int j);
-void	ft_usleep(long duration);
+void	ft_usleep(long int duration);
 long	current_time(void);
 int		ft_exit(char *str);
 int		ft_death(t_philo *ph, int i);
 int		ft_death2(t_list *ph);
 void	init_mutex(t_list *p);
-void	ft_stop(t_list *p);
+void	ft_stop(t_list *ph);
 
 void	*philosopher_thread(void *arg);
-int		initialize_philosophers(t_list *data);
+int		initialize_philosophers(t_list *ph);
+
 
 #endif
