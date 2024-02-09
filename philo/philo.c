@@ -1,5 +1,47 @@
 #include "philo.h"
 
+
+void	ft_stop(t_list *ph)
+{
+	int	i;
+
+	i = -1;
+	while (!ft_death2(ph))
+		ft_usleep(1);
+	while (++i < ph->tab.philos)
+		pthread_join(ph->data[i].thread, NULL);
+	pthread_mutex_destroy(&ph->tab.print);
+	i = -1;
+	while (++i < ph->tab.philos)
+		pthread_mutex_destroy(&ph->data[i].left);
+	if (ph->tab.exit == 2)
+		printf("Each philosopher ate %d time(s)\n", ph->tab.must_eat);
+	free(ph->data);
+}
+
+int	philo_validation(int ac, char **argv, t_list *ph)
+{
+	if ((ac == 5 || ac == 6) && (isnum(argv, 1, 0)))
+	{
+		ph->tab.philos = ft_atoi(argv[1]);
+		if (ph->tab.philos > 200)
+			return (0);
+		ph->tab.time_die = ft_atoi(argv[2]);
+		ph->tab.time_eat = ft_atoi(argv[3]);
+		ph->tab.time_sleep = ft_atoi(argv[4]);
+		ph->tab.must_eat = -1;
+		if (ac == 6)
+			ph->tab.must_eat = ft_atoi(argv[5]);
+		if (ph->tab.must_eat == 0)
+			return (0);
+		if (ph->tab.philos <= 0 || ph->tab.time_die <= 0 \
+			|| ph->tab.time_eat <= 0 || ph->tab.time_sleep <= 0)
+			return (0);
+		return (1);
+	}
+	return (0);
+}
+
 static int	initialize(t_list *ph)
 {
 	int	i;
@@ -30,19 +72,22 @@ static int	initialize(t_list *ph)
 
 int	initialize_philosophers(t_list *ph)
 {
-	int	i;
+	int		i;
 
 	i = 0;
+	// pthread_mutex_init(&ph->tab.print, NULL);
 	while (i < ph->tab.philos)
 	{
 		ph->data[i].index = &ph->tab;
 		if (pthread_create(&ph->data[i].thread, \
 			NULL, philosopher_thread, &ph->data[i]) != 0)
 		{
+			// pthread_mutex_unlock(&ph->tab.print);
 			return (ft_exit("Pthread did not return 0\n"));
 		}
 		i++;
 	}
+	// pthread_mutex_unlock(&ph->tab.print);
 	return (1);
 }
 
