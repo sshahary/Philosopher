@@ -2,7 +2,7 @@ NAME = philo
 CC = gcc
 CFLAGS = -Werror -Wextra -Wall #-fsanitize=thread
 LDFLAGS = -pthread -g3
-SRC = philo.c useful.c threads.c useful2.c
+SRC = main.c useful.c threads.c useful2.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
